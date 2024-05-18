@@ -23,7 +23,14 @@ function Home() {
       response = {},
     },
     initiliaseGame,
+    previousGameState,
   } = useInitialise();
+
+  // useEffect(() => {
+  //   if (gameId && gameId !== "undefined") {
+  //     previousGameState(gameId);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (response) {
@@ -34,15 +41,15 @@ function Home() {
   }, [isComplete]);
 
   const handleInitialiseGame = async () => {
-    if (!gameId) {
-      initiliaseGame();
-    }
+    // if (!gameId) {
+    initiliaseGame();
+    // }
   };
 
   return (
     <>
       <Appbar />
-      {!isComplete && !isPending && (
+      {!gameId && (
         <Button variant="outlined" onClick={handleInitialiseGame}>
           Start
         </Button>

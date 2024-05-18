@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {  POST } from "../apis/apiInterceptor";
+import { POST } from "../apis/apiInterceptor";
 import { GUESS_WORD } from "../apis/APIURIs";
 import { pendingState, resetStatesToDefaultValue, setResultStates } from "../utils";
 

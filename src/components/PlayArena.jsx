@@ -3,12 +3,14 @@ import OtpTypeInput from "./common/OtpTypeInput";
 import { Typography } from "@mui/material";
 import { useState } from "react";
 import { Textarea } from "@mui/joy";
-import { replaceChars } from "../utils";
 import { useEffect } from "react";
 import useGuess from "../hooks/useGuess";
+import Banner from "./common/Banner";
 
 function PlayArena({ initialResponse, gameId, wordLength }) {
-  const [revealedWord, setRevealedWord] = useState("");
+  const [revealedWord, setRevealedWord] = useState(
+    initialResponse.revealedWord ? initialResponse.revealedWord : ""
+  );
   const [wrongGuesses, setWrongGuesses] = useState(0);
   const [inputLetter, setInputLetter] = useState("");
   const [isGameOver, setIsGameOver] = useState(false);
@@ -25,6 +27,12 @@ function PlayArena({ initialResponse, gameId, wordLength }) {
     },
     validateCharacter,
   } = useGuess();
+
+  //   useEffect(() => {
+  //     if (isGameOver || isError) {
+  //       localStorage.removeItem("gameId"); // clear game id after the game
+  //     }
+  //   }, [isGameOver, isError]);
 
   useEffect(() => {
     if (response) {
@@ -49,7 +57,7 @@ function PlayArena({ initialResponse, gameId, wordLength }) {
           length={wordLength}
         />
       )}
-      <Typography level="h1">You have {wrongGuesses} strikes</Typography>
+      <Typography level="h1">You have {10 - wrongGuesses} strikes</Typography>
       <Typography level="h1">Enter the letter</Typography>
       <Textarea
         name="Solid"
@@ -58,11 +66,15 @@ function PlayArena({ initialResponse, gameId, wordLength }) {
         value={inputLetter}
         onChange={handleCharInput}
       />
-      {isGameOver && (
-        <Typography level="h1">
-          {isWin ? "Congratulations, you won!" : "Game over, you lost!"}
-        </Typography>
-      )}
+      {isGameOver &&
+        (isWin ? (
+          <Banner
+            severity={"error"}
+            message={"You have guessed the word, congrats"}
+          />
+        ) : (
+          <Banner severity={"error"} message={"Oops, Game over! try again"} />
+        ))}
     </>
   );
 }

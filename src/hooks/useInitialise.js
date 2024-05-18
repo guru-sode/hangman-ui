@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {  POST } from "../apis/apiInterceptor";
-import { INITIALISE_GAME } from "../apis/APIURIs";
+import { CHECK_PREVIOUS_GAME, INITIALISE_GAME } from "../apis/APIURIs";
 import { pendingState, resetStatesToDefaultValue, setResultStates } from "../utils";
 
 const useInitialise = () => {
@@ -18,6 +18,14 @@ const useInitialise = () => {
     setResultStates(setIsPending, result, setResponse, setMessage, setIsError, setIsComplete);
   };
 
+  const previousGameState = async (gameId) => {
+    resetStatesToDefaultValue(setIsPending, setIsError, setIsComplete);
+    setResponse("");
+    pendingState(setMessage, "Validating the character...", setIsPending);
+    const result = await POST(CHECK_PREVIOUS_GAME, {gameId});
+    setResultStates(setIsPending, result, setResponse, setMessage, setIsError, setIsComplete);
+  };
+
   return {
     state: {
       isPending,
@@ -26,7 +34,8 @@ const useInitialise = () => {
       isComplete,
       response
     },
-    initiliaseGame
+    initiliaseGame,
+    previousGameState
   }
 }
 
