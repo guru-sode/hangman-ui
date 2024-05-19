@@ -56,7 +56,7 @@ function PlayArena({
   };
 
   const handleRestart = () => {
-    restart(true);
+    restart();
   };
 
   return (

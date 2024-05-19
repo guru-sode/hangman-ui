@@ -42,6 +42,8 @@ function Home() {
         setGameId(response.gameId);
       }
       setWordLength(wordLength);
+    } else {
+      sessionStorage.removeItem("gameId");
     }
   }, [isComplete]);
 
