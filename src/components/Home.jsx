@@ -10,7 +10,9 @@ import { useEffect } from "react";
 
 function Home() {
   // States
-  const [gameId, setGameId] = useState(localStorage.getItem("gameId") || null);
+  const [gameId, setGameId] = useState(
+    sessionStorage.getItem("gameId") || null
+  );
   const [wordLength, setWordLength] = useState(0);
 
   // Custom hook
@@ -26,24 +28,26 @@ function Home() {
     previousGameState,
   } = useInitialise();
 
-  // useEffect(() => {
-  //   if (gameId && gameId !== "undefined") {
-  //     previousGameState(gameId);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (gameId && gameId !== "undefined") {
+      previousGameState(gameId);
+    }
+  }, []);
 
   useEffect(() => {
     if (response) {
-      // localStorage.setItem("gameId", response.gameId); // set the game id
-      setGameId(response.gameId);
-      setWordLength(response.wordLength);
+      const { gameId, wordLength } = response;
+      if (gameId) {
+        sessionStorage.setItem("gameId", response.gameId); // set the game id
+        setGameId(response.gameId);
+      }
+      setWordLength(wordLength);
     }
   }, [isComplete]);
 
   const handleInitialiseGame = async () => {
-    // if (!gameId) {
+    sessionStorage.removeItem("gameId"); // clear game id after the game
     initiliaseGame();
-    // }
   };
 
   return (
@@ -61,6 +65,7 @@ function Home() {
           initialResponse={response}
           gameId={gameId}
           wordLength={wordLength}
+          restart={handleInitialiseGame}
         />
       )}
     </>
